@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  mongodb:
+    container_name: "mongodb"
+    image: mongo:4.4
+    hostname: mongodb
+    restart: always
+    volumes:
+      - ./app/migrations/:/docker-entrypoint-initdb.d/
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=development
+      - MONGO_INITDB_USER=mongodb
+      - MONGO_INITDB_PWD=mongodb
+    ports:
+      - 27017:27017
+    command: [ "-f", "/etc/mongod.conf" ]
