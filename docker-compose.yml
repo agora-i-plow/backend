@@ -9,11 +9,9 @@ services:
     volumes:
       - ./app/migrations/:/docker-entrypoint-initdb.d/
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=root
-      - MONGO_INITDB_DATABASE=development
-      - MONGO_INITDB_USER=mongodb
-      - MONGO_INITDB_PWD=mongodb
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
     ports:
       - 27017:27017
     command: [ "-f", "/etc/mongod.conf" ]
