@@ -7,6 +7,7 @@ from app.utils.logger import Log
 from app.services.postgres import Postgres
 from app.services.mongo import Mongo
 from app.utils.exceptions import CommonException, InternalServerError
+from app.utils.matching import reformat_references
 
 from app.controllers.users import users_router
 from app.controllers.admin import admin_router
@@ -21,6 +22,7 @@ async def startup() -> None:
     await Log.initialise_logger()
     await Postgres.connect_db()
     Mongo.connect_db()
+    await reformat_references()
 
 @app.on_event('shutdown')
 async def shutdown() -> None:
