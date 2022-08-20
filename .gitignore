@@ -136,3 +136,4 @@ dmypy.json
 /.idea/.gitignore
 /.idea/dataSources.xml
 /app/test.py
+/app/f.json
