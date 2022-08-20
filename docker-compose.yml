@@ -14,7 +14,7 @@ services:
       - MONGO_DATABASE=${MONGO_DATABASE}
     ports:
       - 27017:27017
-  db:
+  postgresql:
     container_name: "postgresql"
     image: postgres:14.5
     hostname: postgresql
@@ -26,3 +26,20 @@ services:
       - POSTGRES_DB=${POSTGRES_DATABASE}
       - POSTGRES_USER=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/code
+    ports:
+      - "${FASTAPI_PORT}:${FASTAPI_PORT}"
+    depends_on:
+      - mongodb
+      - postgresql
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=postgresql
+      - MONGO_HOST=mongodb
+    restart: always

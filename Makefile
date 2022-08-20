@@ -7,13 +7,19 @@ prepare:
 	python -m venv .venv && source .venv/bin/activate && python -m pip install -r requirements.txt
 
 db:
-	docker compose up -d
+	docker compose up -d postgresql mongodb
 
 run:
+	docker compose up -d api
+
+run-local:
 	uvicorn app.__main__:app  --host 0.0.0.0 --port=${FASTAPI_PORT} --log-level=warning
 
 down:
 	docker compose down
+
+logs:
+	docker compose logs
 
 format:
 	isort ${CODE}

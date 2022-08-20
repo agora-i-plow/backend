@@ -1,0 +1,33 @@
+@startuml
+
+skinparam backgroundColor transparent
+skinparam defaultFontSize 16
+skinparam defaultFontWeight 3
+
+actor User
+
+node Docker as d1 #Orchid {
+
+  node "Uvicorn" as api #MediumPurple{
+    interface HTTP
+    [FastAPI] #Pink
+    [FastAPI] -left- HTTP
+  }
+}
+
+node Docker as d2 #Orchid{
+  database MongoDB #SandyBrown
+}
+node Docker as d3 #Orchid {
+  database PostgreSQL #SandyBrown
+}
+
+
+FastAPI <-up-> MongoDB: "Item matching"
+FastAPI <-down-> PostgreSQL: "User authentication"
+
+FastAPI -[hidden]- MongoDB
+
+User -down-> HTTP
+
+@enduml
