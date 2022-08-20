@@ -9,7 +9,7 @@ from app.models.users.producer import Producer
 from app.models.users.admin import Admin
 from app.utils.formatter import format_model
 from app.views.common import SuccessfullResponse, UserIn, FileIn
-from app.views.admin import DuplicatesCounter
+from app.views.admin import DuplicatesCounter, ErrorsCounter
 from app.utils.auth import get_password_hash,create_access_token, verify_password
 from app.utils.exceptions import ForbiddenException, UserNotFoundException
 from app.utils.file_parser import parse_json_file
@@ -31,7 +31,7 @@ async def upload_reference(file_in: FileIn = Depends(), user_in: UserIn = Depend
 
 
 @admin_router.post('/admin/relink')
-async def relink_items(user_in: UserIn = Depends()) -> SuccessfullResponse:
+async def relink_items(user_in: UserIn = Depends()) -> ErrorsCounter:
     admin = await Admin.get(user_in.username)
-    await admin.relink_references()
-    return SuccessfullResponse()
+    errors = await admin.relink_references()
+    return ErrorsCounter(errors=errors)

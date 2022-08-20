@@ -7,9 +7,7 @@ from app.services.postgres import Postgres
 from app.services.mongo import Mongo
 from app.models.users.producer import Producer
 from app.models.base.base_user import Roles
-from app.utils.exceptions import UserNotFoundException, ForbiddenException, BadRequest
-
-# TODO: Сделать счетчик ошибок в релинке
+from app.utils.exceptions import UserNotFoundException, ForbiddenException, BadRequest, ItemNotFoundException
 
 @dataclass
 class Admin(Producer):
@@ -48,10 +46,17 @@ class Admin(Producer):
         return 0
 
     @classmethod
-    async def relink_references(cls) -> None:
+    async def relink_references(cls) -> int:
+        async def exception_handler(func, item_id: str, reference_id: str) -> int:
+            try:
+                await func(item_id, reference_id)
+                return 0
+            except ItemNotFoundException as e:
+                return 1
+
         coroutines = list()
         async for item in Mongo.db['references'].find():
             item_id = item['product_id']
             reference_id = None # <------------------------- ML here
-            coroutines.append(cls.manually_link(item_id, reference_id))
-        await gather(coroutines)
+            coroutines.append(exception_handler(cls.manually_link, item_id, reference_id))
+        await sum(gather(coroutines))

@@ -6,3 +6,6 @@ from app.utils.auth import get_current_user
 
 class DuplicatesCounter(BaseModel):
     duplicates: int = Field(0, description='Number of duplicates')
+
+class ErrorsCounter(BaseModel):
+    errors: int = Field(0, description='Number of errors')
