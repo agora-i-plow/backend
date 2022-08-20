@@ -9,3 +9,15 @@ class ReferencesOut(BaseModel):
 
 class ItemsOut(BaseModel):
     items: list[dict] = Field([], description='List of items')
+
+class MatchedOut(BaseModel):
+    items: list[dict] = Field([], example=[
+        {
+            'id': '',
+            'reference_id': ''
+        },
+        {
+            'id': '',
+            'reference_id': ''
+        }
+    ])
