@@ -82,7 +82,50 @@
 
 ## Как запустить?
 
-WIP
+### Технические требования
+Для запуска решения требуется наличие в системе следующих утилит:
+- `Python` версии `3.10` и выше
+- `Docker, docker-compose`
+- `Make` 
+
+### Подготовка к запуску
+1) В корней папке необходимо создать `.env` файл, со следующим содержимым:
+```shell
+POSTGRES_USERNAME=...
+POSTGRES_PASSWORD=...
+POSTGRES_DATABASE=...
+POSTGRES_HOST=...
+
+MONGO_USER=...
+MONGO_PASSWORD=...
+MONGO_DATABASE=...
+MONGO_HOST=...
+
+FASTAPI_PORT=...
+FASTAPI_SECRET=...
+FASTAPI_HASH_ALGORITHM=...
+FASTAPI_HASH_EXPIRATION=...
+```
+_Пример заполнения приведен в файле `.env.sample`_
+2) Запуск баз данных:
+```shell
+make db
+```
+
+### Запуск в докере
+```shell
+make run
+```
+
+### Запуск локально
+1) Создание виртуально среды и установка зависимостей:
+```shell
+make prepare
+```
+2) Запуск сервиса:
+```shell
+make run-local
+```
 
 ## i plow() - это мы
 
