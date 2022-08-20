@@ -14,8 +14,6 @@ from app.utils.auth import get_password_hash,create_access_token, verify_passwor
 from app.utils.exceptions import ForbiddenException, UserNotFoundException
 from app.utils.file_parser import parse_json_file
 
-# TODO: Админы тоже могут линковать товары (но это редко происходит)
-
 admin_router = APIRouter(tags=["Функции админа"])
 
 @admin_router.post('/admin/upload')

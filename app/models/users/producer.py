@@ -25,8 +25,6 @@ class Producer(BaseUser):
         if not record:
             raise UserNotFoundException
         user = cls._from_record(record)
-        if user.role is Roles.PRODUCER.value:
-            raise ForbiddenException('User is not a producer')
         return user
 
     @staticmethod
