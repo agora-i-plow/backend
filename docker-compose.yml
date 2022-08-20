@@ -9,8 +9,20 @@ services:
     volumes:
       - ./app/migrations/mongo:/docker-entrypoint-initdb.d/
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_DATABASE=${MONGO_DATABASE}
     ports:
       - 27017:27017
+  db:
+    container_name: "postgresql"
+    image: postgres:14.5
+    hostname: postgresql
+    volumes:
+      - ./app/migrations/postgres:/docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

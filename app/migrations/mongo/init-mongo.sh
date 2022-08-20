@@ -1,7 +1,10 @@
 set -e
 
 mongo <<EOF
-use $MONGO_INITDB_DATABASE
+use admin
+db.createUser({ user: "${MONGO_USER}" , pwd: "${MONGO_PASSWORD}", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
+
+use $MONGO_DATABASE
 
 db.createCollection('references')
 db.createCollection('items')
