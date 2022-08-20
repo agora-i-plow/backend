@@ -18,13 +18,13 @@ from app.utils.file_parser import parse_json_file
 producer_router = APIRouter(tags=["Функции производителя"])
 
 @producer_router.post('/producer/upload')
-async def upload_item(items: list[dict], user_in: UserIn = Depends()) -> DuplicatesCounter:
+async def upload_items(items: list[dict], user_in: UserIn = Depends()) -> DuplicatesCounter:
     producer = await Producer.get(user_in.username)
     duplicates = await producer.upload_items(items)
     return DuplicatesCounter(duplicates=duplicates)
 
 @producer_router.post('/producer/upload/file')
-async def upload_item_using_file(file_in: FileIn = Depends(), user_in: UserIn = Depends()) -> DuplicatesCounter:
+async def upload_items_using_file(file_in: FileIn = Depends(), user_in: UserIn = Depends()) -> DuplicatesCounter:
     producer = await Producer.get(user_in.username)
     items = parse_json_file(file_in.file)
     duplicates = await producer.upload_items(items)

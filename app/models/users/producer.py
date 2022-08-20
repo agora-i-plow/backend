@@ -6,6 +6,8 @@ from app.services.postgres import Postgres
 from app.services.mongo import Mongo
 from app.models.base.base_user import BaseUser, Roles
 from app.utils.exceptions import UserNotFoundException, ForbiddenException, BadRequest, ItemNotFoundException
+from app.utils.matching import match_item
+from app.utils.formatter import format_item
 
 @dataclass
 class Producer(BaseUser):
@@ -60,5 +62,10 @@ class Producer(BaseUser):
 
     @classmethod
     async def auto_link(cls, item_id: str) -> None:
-        reference_id = None #  <---------------------------- ML here
-        await cls.manually_link(item_id, reference_id)
+        item = await Mongo.db['items'].find_one({'product_id': item_id})
+        if not item:
+            raise ItemNotFoundException
+        reference_id = match_item(format_item(item))
+        await Mongo.db['items'].update_one({'product_id': item_id}, {'$set': {
+            'reference_id': reference_id
+        }})

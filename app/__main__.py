@@ -12,6 +12,7 @@ from app.controllers.users import users_router
 from app.controllers.admin import admin_router
 from app.controllers.producer import producer_router
 from app.controllers.customer import customer_router
+from app.controllers.preview import preview_router
 
 app = FastAPI(title='Reference matcher')
 
@@ -56,3 +57,4 @@ app.include_router(users_router)
 app.include_router(admin_router)
 app.include_router(producer_router)
 app.include_router(customer_router)
+app.include_router(preview_router)

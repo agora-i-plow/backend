@@ -8,6 +8,8 @@ from app.services.mongo import Mongo
 from app.models.users.producer import Producer
 from app.models.base.base_user import Roles
 from app.utils.exceptions import UserNotFoundException, ForbiddenException, BadRequest, ItemNotFoundException
+from app.utils.matching import match_item
+from app.utils.formatter import format_item
 
 @dataclass
 class Admin(Producer):
@@ -57,6 +59,6 @@ class Admin(Producer):
         coroutines = list()
         async for item in Mongo.db['references'].find():
             item_id = item['product_id']
-            reference_id = None # <------------------------- ML here
+            reference_id = match_item(format_item(item))
             coroutines.append(exception_handler(cls.manually_link, item_id, reference_id))
         await sum(gather(coroutines))
