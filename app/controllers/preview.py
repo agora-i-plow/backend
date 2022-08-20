@@ -62,7 +62,7 @@ async def upload_items_with_matching(items: list[dict] = Body(..., example=[
     async def converter(item):
         reference_id = await match_item(item)
         return {
-            'id': item['product_id'],
+            'id': item['id'],
             'reference_id': reference_id
         }
     matched: list[dict[str,str]] = list()

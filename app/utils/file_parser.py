@@ -12,4 +12,4 @@ def parse_json_file(file: UploadFile) -> list[dict]:
         result = loads(data)
         return result
     except JSONDecodeError as e:
-        raise BadRequest('File is not in json format')
+        raise BadRequest('File is not in json format', e)
