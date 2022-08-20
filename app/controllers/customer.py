@@ -15,8 +15,6 @@ from app.views.customer import SearchIn, ReferencesOut, ItemsOut
 from app.utils.auth import get_password_hash,create_access_token, verify_password
 from app.utils.exceptions import ForbiddenException, UserNotFoundException
 
-# TODO: Добавить загрузку файла
-
 customer_router = APIRouter(tags=["Функции покупателя"])
 
 @customer_router.get('/customer/reference')

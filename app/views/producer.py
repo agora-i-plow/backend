@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, UploadFile, File
 from uuid import UUID
 from pydantic import BaseModel, Field
 from app.models.base.base_user import Roles

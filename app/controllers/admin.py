@@ -8,12 +8,12 @@ from app.models.base.base_user import Roles
 from app.models.users.producer import Producer
 from app.models.users.admin import Admin
 from app.utils.formatter import format_model
-from app.views.common import SuccessfullResponse, UserIn
+from app.views.common import SuccessfullResponse, UserIn, FileIn
 from app.views.admin import DuplicatesCounter
 from app.utils.auth import get_password_hash,create_access_token, verify_password
 from app.utils.exceptions import ForbiddenException, UserNotFoundException
+from app.utils.file_parser import parse_json_file
 
-# TODO: Добавить загрузку файла
 # TODO: Админы тоже могут линковать товары (но это редко происходит)
 
 admin_router = APIRouter(tags=["Функции админа"])
@@ -23,6 +23,14 @@ async def upload_reference(references: list[dict], user_in: UserIn = Depends()) 
     admin = await Admin.get(user_in.username)
     duplicates = await admin.upload_references(references)
     return DuplicatesCounter(duplicates=duplicates)
+
+@admin_router.post('/admin/upload/file')
+async def upload_reference(file_in: FileIn = Depends(), user_in: UserIn = Depends()) -> DuplicatesCounter:
+    admin = await Admin.get(user_in.username)
+    references = parse_json_file(file_in.file)
+    duplicates = await admin.upload_references(references)
+    return DuplicatesCounter(duplicates=duplicates)
+
 
 @admin_router.post('/admin/relink')
 async def relink_items(user_in: UserIn = Depends()) -> SuccessfullResponse:

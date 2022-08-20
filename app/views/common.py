@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, UploadFile, File
 from uuid import UUID
 from pydantic import BaseModel, Field
 from app.models.base.base_user import Roles
@@ -18,3 +18,6 @@ class UserOut(BaseModel):
 
 class UserIn(BaseModel):
     username: str = Depends(get_current_user)
+
+class FileIn(BaseModel):
+    file: UploadFile = File(..., description='File in json format')
