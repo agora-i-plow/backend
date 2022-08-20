@@ -12,7 +12,7 @@ from app.views.common import UserOut, UserIn, TokenOut, SuccessfullResponse
 from app.utils.auth import get_password_hash,create_access_token, verify_password
 from app.utils.exceptions import ForbiddenException, UserNotFoundException
 
-users_router = APIRouter(tags=["Пользователи"])
+users_router = APIRouter(tags=["Функции пользователей"])
 
 async def get_user_class(username: str) -> Producer | Admin:
     for classname in [Producer, Admin]:

@@ -1,17 +1,18 @@
+from asyncio import gather
 from dataclasses import dataclass
 from uuid import UUID
 from asyncpg.exceptions import UniqueViolationError
+from pymongo.errors import BulkWriteError
 from app.services.postgres import Postgres
-from app.models.base.base_user import BaseUser, Roles
+from app.services.mongo import Mongo
+from app.models.users.producer import Producer
+from app.models.base.base_user import Roles
 from app.utils.exceptions import UserNotFoundException, ForbiddenException, BadRequest
 
-@dataclass
-class Admin(BaseUser):
-    uuid: UUID
-    username: str
-    hashed_password: str
-    role: Roles
+# TODO: Сделать счетчик ошибок в релинке
 
+@dataclass
+class Admin(Producer):
     @classmethod
     async def get(cls, username: str):
         sql = """
@@ -38,4 +39,19 @@ class Admin(BaseUser):
         except UniqueViolationError as e:
             raise BadRequest('User already exists', e) from e
 
+    @classmethod
+    async def upload_references(cls, references: list[dict]) -> int:
+        try:
+            await Mongo.db['references'].insert_many(references, ordered=False)
+        except BulkWriteError as e:
+            return len(e.details['writeErrors'])
+        return 0
 
+    @classmethod
+    async def relink_references(cls) -> None:
+        coroutines = list()
+        async for item in Mongo.db['references'].find():
+            item_id = item['product_id']
+            reference_id = None # <------------------------- Neural network here
+            coroutines.append(cls.manually_link(item_id, reference_id))
+        await gather(coroutines)
