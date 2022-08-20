@@ -14,3 +14,5 @@ db.references.createIndex({'name': 'text'})
 db.items.createIndex({'product_id': 1},{unique: true})
 db.items.createIndex({'name': 'text'})
 EOF
+
+mongoimport --db item_matcher --collection references --file /docker-entrypoint-initdb.d/agora_hack_products_references.json --jsonArray
