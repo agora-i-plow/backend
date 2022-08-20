@@ -130,6 +130,35 @@ make prepare
 make run-local
 ```
 
+### Тестирование сервиса
+
+Для тестирования сервиса удобно использовать `curl`:
+```shell
+$ curl -X 'POST' \
+  'http://0.0.0.0:8100/match_products' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '[
+  {
+    "id": "0039af5efceac4ab",
+    "name": "Холодильник Бирюса 118",
+    "props": [
+      "Мощность  замораживания  4 кг/сутки"
+    ]
+  },
+  {
+    "id": "004f2158acb8165c",
+    "name": "ASUS TUF-GTX1660S-O6G-GAMING Видеокарта",
+    "props": [
+      "Объем  видеопамяти\t6144 МБ",
+      "Частота  памяти\t14002 МГц",
+      "Разъемы   и интерфейсы выход DVI, выход DisplayPort, выход HDMI"
+    ]
+  }
+]'
+[{"id":"0039af5efceac4ab","reference_id":"28085e941cde1639"},{"id":"004f2158acb8165c","reference_id":"9afe55bb4bf1e8a8"}]
+```
+
 ## i plow() - это мы
 
 >- Голубев Егор - бекенд-разработчик
