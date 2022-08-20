@@ -1,3 +1,4 @@
+import asyncio
 from datetime import timedelta
 from fastapi import APIRouter, File, UploadFile, Body
 from fastapi.param_functions import Depends
@@ -12,6 +13,7 @@ from app.views.customer import MatchedOut
 from app.views.common import SuccessfullResponse, UserIn, FileIn
 from app.views.admin import DuplicatesCounter
 from app.views.producer import ItemIn
+from app.utils.logger import Log
 from app.utils.auth import get_password_hash,create_access_token, verify_password
 from app.utils.exceptions import ForbiddenException, UserNotFoundException
 from app.utils.file_parser import parse_json_file
@@ -57,11 +59,15 @@ async def upload_items_with_matching(items: list[dict] = Body(..., example=[
         ]
     },
 ])) -> list[dict[str,str]]:
-    matched: list[dict[str,str]] = list()
-    for item in items:
+    async def converter(item):
         reference_id = await match_item(item)
-        matched.append({
-            'id': item['id'], # Не product id
+        return {
+            'id': item['product_id'],
             'reference_id': reference_id
-        })
+        }
+    matched: list[dict[str,str]] = list()
+    coroutines = list()
+    for item in items:
+        coroutines.append(converter(item))
+    matched = await asyncio.gather(*coroutines)
     return matched
