@@ -57,8 +57,8 @@ class Admin(Producer):
                 return 1
 
         coroutines = list()
-        async for item in Mongo.db['references'].find():
+        async for item in Mongo.db['items'].find():
             item_id = item['product_id']
-            reference_id = match_item(format_item(item))
+            reference_id = await match_item(format_item(item))
             coroutines.append(exception_handler(cls.manually_link, item_id, reference_id))
-        await sum(gather(coroutines))
+        return sum(await gather(*coroutines))

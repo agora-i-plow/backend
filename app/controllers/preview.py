@@ -24,7 +24,7 @@ preview_router = APIRouter(tags=["Превью метчера"])
 async def upload_items_with_matching(items: list[dict]) -> list[dict[str,str]]:
     matched: list[dict[str,str]] = list()
     for item in items:
-        reference_id = match_item(item)
+        reference_id = await match_item(item)
         matched.append({
             'id': item['id'], # Не product id
             'reference_id': reference_id

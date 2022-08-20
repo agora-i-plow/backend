@@ -65,7 +65,7 @@ class Producer(BaseUser):
         item = await Mongo.db['items'].find_one({'product_id': item_id})
         if not item:
             raise ItemNotFoundException
-        reference_id = match_item(format_item(item))
+        reference_id = await match_item(format_item(item))
         await Mongo.db['items'].update_one({'product_id': item_id}, {'$set': {
             'reference_id': reference_id
         }})
