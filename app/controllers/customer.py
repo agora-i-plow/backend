@@ -36,9 +36,13 @@ async def get_items() -> ItemsOut:
 @customer_router.get('/producer/reference/search')
 async def auto_link_item(search_in: SearchIn = Depends()) -> ReferencesOut:
     references = await Customer.references_search(search_in.search_query)
+    references = format_items(references)
+    references = ReferencesOut(references=references)
     return references
 
 @customer_router.get('/customer/item/search')
 async def search_items(search_in: SearchIn = Depends()) -> ItemsOut:
     items = await Customer.items_search(search_in.search_query)
+    items = format_items(items)
+    items = ItemsOut(items=items)
     return items
