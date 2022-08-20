@@ -17,6 +17,10 @@ def format_model(raw_models: BaseItem | BaseUser, model: T) -> T | None:
         return None
     return model(**asdict(raw_models))
 
+def format_items(items: list[dict]) -> list[dict]:
+
+    return [{k: v for k, v in item.items() if k not in {'_id',}} for item in items]
+
 def trim_extra_whitespaces(text: str) -> str:
     return ' '.join(text.split())
 
