@@ -52,6 +52,6 @@ class Admin(Producer):
         coroutines = list()
         async for item in Mongo.db['references'].find():
             item_id = item['product_id']
-            reference_id = None # <------------------------- Neural network here
+            reference_id = None # <------------------------- ML here
             coroutines.append(cls.manually_link(item_id, reference_id))
         await gather(coroutines)

@@ -5,9 +5,13 @@ from fastapi.responses import JSONResponse
 
 from app.utils.logger import Log
 from app.services.postgres import Postgres
+from app.services.mongo import Mongo
 from app.utils.exceptions import CommonException, InternalServerError
 
 from app.controllers.users import users_router
+from app.controllers.admin import admin_router
+from app.controllers.producer import producer_router
+from app.controllers.customer import customer_router
 
 app = FastAPI(title='Reference matcher')
 
@@ -15,9 +19,11 @@ app = FastAPI(title='Reference matcher')
 async def startup() -> None:
     await Log.initialise_logger()
     await Postgres.connect_db()
+    Mongo.connect_db()
 
 @app.on_event('shutdown')
 async def shutdown() -> None:
+    Mongo.disconnect_db()
     await Postgres.disconnect_db()
     await Log.shutdown_logger()
 
@@ -47,3 +53,6 @@ async def log_requst(request: Request, call_next):
     return response
 
 app.include_router(users_router)
+app.include_router(admin_router)
+app.include_router(producer_router)
+app.include_router(customer_router)

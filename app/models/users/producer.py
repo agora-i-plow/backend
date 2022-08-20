@@ -62,5 +62,5 @@ class Producer(BaseUser):
 
     @classmethod
     async def auto_link(cls, item_id: str) -> None:
-        reference_id = None #  <---------------------------- Neural network here
+        reference_id = None #  <---------------------------- ML here
         await cls.manually_link(item_id, reference_id)
