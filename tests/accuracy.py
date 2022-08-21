@@ -17,7 +17,7 @@ async def main():
     skips = 0
 
 
-    async for item in Mongo.db['items'].find(limit=2780):
+    async for item in Mongo.db['items'].find():
         new_item = format_item(item)
         reference = await match_item(new_item)
         try:
@@ -49,9 +49,13 @@ async def main():
         'accuracy': good/total
     })
 t_start = perf_counter()
-asyncio.run(main())
-print(perf_counter()-t_start,'seconds')
-print('='*50)
+try:
+    asyncio.run(main())
+    print(perf_counter() - t_start, 'seconds')
+    print('=' * 50)
+except ZeroDivisionError:
+    print('Кажется вы забыли загрузить тестовые данные (items)')
+    print('Сделайте это через веб интерфейс доступный на localhost:8100/docs')
 
 # pprint(erroneous_references)
 
