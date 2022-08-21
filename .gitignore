@@ -135,5 +135,5 @@ dmypy.json
 /.idea/vcs.xml
 /.idea/.gitignore
 /.idea/dataSources.xml
-/app/test.py
+/tests/accuracy.py
 /app/f.json

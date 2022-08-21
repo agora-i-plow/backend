@@ -21,6 +21,12 @@ down:
 logs:
 	docker compose logs
 
+test:
+	docker exec -it api python -m tests.accuracy
+
+test-local:
+	python -m tests.accuracy
+
 format:
 	isort ${CODE}
 	black ${CODE}

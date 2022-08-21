@@ -27,6 +27,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   api:
+    container_name: "api"
     build:
       context: .
       dockerfile: ./Dockerfile
