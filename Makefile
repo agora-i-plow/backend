@@ -31,7 +31,7 @@ format:
 	isort ${CODE}
 	black ${CODE}
 
-pylint:
+lint:
 	pylint ${CODE}
 
 open_postgres:

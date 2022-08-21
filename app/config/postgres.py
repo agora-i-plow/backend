@@ -1,5 +1,6 @@
 from pydantic import BaseSettings, PostgresDsn
 
+
 class PostgresSettings(BaseSettings):
     POSTGRES_USERNAME: str
     POSTGRES_PASSWORD: str
@@ -7,7 +8,7 @@ class PostgresSettings(BaseSettings):
     POSTGRES_HOST: str
 
     class Config:
-        env_file: str = '.env'
+        env_file: str = ".env"
 
     @property
     def db_uri(self) -> str:
@@ -16,5 +17,5 @@ class PostgresSettings(BaseSettings):
             user=self.POSTGRES_USERNAME,
             password=self.POSTGRES_PASSWORD,
             host=self.POSTGRES_HOST,
-            path=f'/{self.POSTGRES_DATABASE}',
+            path=f"/{self.POSTGRES_DATABASE}",
         )

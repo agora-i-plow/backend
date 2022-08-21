@@ -1,4 +1,5 @@
-from pydantic import BaseSettings, PostgresDsn
+from pydantic import BaseSettings
+
 
 class MongoSettings(BaseSettings):
     MONGO_USER: str
@@ -7,8 +8,8 @@ class MongoSettings(BaseSettings):
     MONGO_HOST: str
 
     class Config:
-        env_file: str = '.env'
+        env_file: str = ".env"
 
     @property
     def db_uri(self) -> str:
-        return f'mongodb://{self.MONGO_USER}:{self.MONGO_PASSWORD}@{self.MONGO_HOST}'
+        return f"mongodb://{self.MONGO_USER}:{self.MONGO_PASSWORD}@{self.MONGO_HOST}"

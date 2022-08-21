@@ -1,7 +1,8 @@
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+
 from app.utils.exceptions import InternalServerError
 from app.utils.get_settings import get_mongo_settings
-from app.utils.logger import Log
+
 
 class Mongo:
     client: AsyncIOMotorDatabase

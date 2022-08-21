@@ -1,15 +1,17 @@
-from enum import Enum
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from enum import Enum
+
 from asyncpg import Record
 
+
 class Roles(Enum):
-    PRODUCER: str = 'producer'
-    ADMIN: str = 'admin'
+    PRODUCER: str = "producer"
+    ADMIN: str = "admin"
+
 
 @dataclass
 class BaseUser(ABC):
-
     @classmethod
     def _from_record(cls, record: Record, **kwargs):
         return cls(**record, **kwargs)

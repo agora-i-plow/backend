@@ -1,15 +1,22 @@
 from asyncio import gather
 from dataclasses import dataclass
-from uuid import UUID
+
 from asyncpg.exceptions import UniqueViolationError
 from pymongo.errors import BulkWriteError
-from app.services.postgres import Postgres
-from app.services.mongo import Mongo
-from app.models.users.producer import Producer
+
 from app.models.base.base_user import Roles
-from app.utils.exceptions import UserNotFoundException, ForbiddenException, BadRequest, ItemNotFoundException
-from app.utils.matching import match_item
+from app.models.users.producer import Producer
+from app.services.mongo import Mongo
+from app.services.postgres import Postgres
+from app.utils.exceptions import (
+    BadRequest,
+    ForbiddenException,
+    ItemNotFoundException,
+    UserNotFoundException,
+)
 from app.utils.formatter import format_item
+from app.utils.matching import match_item
+
 
 @dataclass
 class Admin(Producer):
@@ -25,7 +32,7 @@ class Admin(Producer):
             raise UserNotFoundException
         user = cls._from_record(record)
         if user.role != Roles.ADMIN.value:
-            raise ForbiddenException('User is not an admin')
+            raise ForbiddenException("User is not an admin")
         return user
 
     @staticmethod
@@ -37,14 +44,14 @@ class Admin(Producer):
         try:
             await Postgres.execute(sql, username, hashed_password, Roles.ADMIN.value)
         except UniqueViolationError as e:
-            raise BadRequest('User already exists', e) from e
+            raise BadRequest("User already exists", e) from e
 
     @classmethod
     async def upload_references(cls, references: list[dict]) -> int:
         try:
-            await Mongo.db['references'].insert_many(references, ordered=False)
+            await Mongo.db["references"].insert_many(references, ordered=False)
         except BulkWriteError as e:
-            return len(e.details['writeErrors'])
+            return len(e.details["writeErrors"])
         return 0
 
     @classmethod
@@ -57,8 +64,10 @@ class Admin(Producer):
                 return 1
 
         coroutines = list()
-        async for item in Mongo.db['items'].find():
-            item_id = item['product_id']
+        async for item in Mongo.db["items"].find():
+            item_id = item["product_id"]
             reference_id = await match_item(format_item(item))
-            coroutines.append(exception_handler(cls.manually_link, item_id, reference_id))
+            coroutines.append(
+                exception_handler(cls.manually_link, item_id, reference_id)
+            )
         return sum(await gather(*coroutines))
