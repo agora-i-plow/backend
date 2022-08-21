@@ -15,8 +15,10 @@ async def match_item(item: dict) -> str | None:
 def reformat_item(item: dict) -> dict:
     props = ' '.join(item['props'])
     props = ' '.join([props, item['name']])
+    props = ''.join(list(filter(lambda x: x.isalnum() or x.isspace(), list(props))))
     item['combined'] = props
     return item
+
 
 
 async def reformat_references() -> None:
